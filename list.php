@@ -23,6 +23,7 @@
 							<th>Email</th>
                             <th>Jenis Kelamin</th>
                             <th>Alamat</th>
+							<th>Aksi</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -53,6 +54,11 @@
                                 ?>
                         <td><?= $gender ?></td>
                         <td><?= $row['alamat']; ?></td>
+						<td>
+								<a href="edit.php?nim=<?= $row['nim']; ?>" class="btn btn-sm btn-warning">Edit</a>
+								<a href="hapus.php?nim=<?= $row['nim']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('anda yakin ingin hapus?');">Hapus</a>
+								
+						</td>
 					</tr>
 
 						<?php $no++; } ?>
