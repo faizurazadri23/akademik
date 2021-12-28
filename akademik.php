@@ -1,18 +1,12 @@
-<html> 
-    <head> 
-        <title>Akademik</title> 
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    </head> 
 
-<body> 
-<div class="container col-md-6 mt-4">
-		<h1>Sistem Akademik</h1>
+	<div class="col-sm">
+		<h1>Data Mahasiswa</h1>
 		<div class="card">
-			<div class="card-header bg-success text-white">
-				Tambah Data Mahasiswa
+			<div class="card-header bg-success text-white ">
+				DATA Mahasiswa <a href="index.php?page=addakademik" class="btn btn-sm btn-primary float-right">Tambah</a>
 			</div>
 			<div class="card-body">
-				<form action="" method="post" role="form">
+			<form action="" method="post" role="form">
 					<div class="form-group">
 						<label>Nomor Induk Mahasiswa</label>
 						<input type="number" name="nim" required="" maxlength="10" class="form-control">
@@ -52,32 +46,37 @@
 
 					<button type="submit" class="btn btn-primary" name="submit" value="simpan">Simpan data</button>
 
-                    <a class="btn btn-default" href="list.php" role="button">Lihat data</a>
+                    <a class="btn btn-default" href="index.php?page=akademik" role="button">Lihat data</a>
 				</form>
 
 				<?php
-				    include("koneksi.php");
+				    include("Class_crud.php");
 				
 				//melakukan pengecekan jika button submit diklik maka akan menjalankan perintah simpan dibawah ini
 				if (isset($_POST['submit'])) {
-					//menampung data dari inputan
-					$nim = $_POST['nim'];
-					$fullname = $_POST['fullname'];
-					$birthday = $_POST['birthday'];
+					$crud = new Crud();
 
-                    $email = $_POST['email'];
-					$gender = $_POST['gender'];
-					$address = $_POST['address'];
+					$arrData = array('nim' => $_POST['nim'],
+									'fullname' => $_POST['fullname'],
+									'birthday' => $_POST['birthday'],
+									'email' => $_POST['email'],
+									'gender' => $_POST['gender'],
+									'address' => $_POST['address']
+					
+								);
+				
+					$hasil = $crud->createData('mahasiswa', $arrData);
 
-					//query untuk menambahkan barang ke database, pastikan urutan nya sama dengan di database
-					$datas = mysqli_query($koneksi, "INSERT INTO mahasiswa (nim,nama_mhs,tgl_lahir,email,jenis_kelamin,alamat) VALUES ('$nim', '$fullname', '$birthday', '$email', '$gender', '$address')") or die(mysqli_error($koneksi));
-
-					//ini untuk menampilkan alert berhasil dan redirect ke halaman index
-					echo "<script>alert('data berhasil disimpan.');window.location='list.php';</script>";
+					if($hasil=='Sukses'){
+						echo "<script>alert('data berhasil disimpan.');window.location='index.php?page=akademik';</script>";
+					}else{
+						echo "<script>alert('data gagal disimpan.');</script>";
+					}
+					
 				}
 				?>
 			</div>
+
+			
 		</div>
-    </div>
-</body> 
-</html>
+	</div>

@@ -50,7 +50,9 @@
 
                         if($_GET['page']=="akademik"){
                             include ("list.php");
-                        }else{
+                        }else if($_GET['page']=="addakademik"){
+                            include ("akademik.php");
+                        } else{
                             include "home.php";
                         }
                 ?>
