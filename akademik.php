@@ -56,18 +56,9 @@
 				if (isset($_POST['submit'])) {
 					$crud = new Crud();
 
-					$arrData = array('nim' => $_POST['nim'],
-									'fullname' => $_POST['fullname'],
-									'birthday' => $_POST['birthday'],
-									'email' => $_POST['email'],
-									'gender' => $_POST['gender'],
-									'address' => $_POST['address']
-					
-								);
-				
-					$hasil = $crud->createData('mahasiswa', $arrData);
+					$hasil = $crud->createData($_POST['nim'],$_POST['fullname'], $_POST['birthday'], $_POST['email'], $_POST['gender'],  $_POST['address']);
 
-					if($hasil=='Sukses'){
+					if($hasil){
 						echo "<script>alert('data berhasil disimpan.');window.location='index.php?page=akademik';</script>";
 					}else{
 						echo "<script>alert('data gagal disimpan.');</script>";

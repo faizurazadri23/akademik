@@ -7,78 +7,81 @@ class Crud extends Koneksi{
 
     function __construct()
     {
-        parent::__construct();
+        $host = "localhost";
+        $dbname = "db_akademik";
+        $username = "root";
+        $password = "";
+        $this->db = new PDO("mysql:host={$host};dbname={$dbname}", $username, $password);
     }
 
     //fungsi untuk menampilkan data
-    public function readData($table, $id_table, $id_Value){
-        $q = "SELECT * FROM $table";
-
-        if($id_table!=null){
-            $q.=" WHERE $id_table='" .$id_Value."'"; 
-        }
-
-        $result = $this->conn->query($q);
-
-        if(!$result){
-            echo "Gagal menampilkan data";
-        }
-
-        $rows = array();
-
-        while($row=$result->fetch_assoc()){
-            $rows[] = $row;
-        }
-
-        return $rows;
+    public function readData(){
+        $query = $this->db->prepare("SELECT * FROM mahasiswa");
+        $query->execute();
+        $data = $query->fetchAll();
+        return $data;
     }
 
-    public function createData($table, $data){
-        $fiealds = implode(', ', array_keys($data));
-
-        $escaped_values = array_map(mysqli_real_escape_string(), array_values($data));
-
-        foreach ($escaped_values as $idx => $data) $escaped_values[$idx]= "'" . $data."'";
-
-        $values = implode(', ', $escaped_values);
-
-        $q = "INSERT INTO $table ($fiealds) VALUES ($values)";
+    public function createData($nim, $nama_mhs, $tgl_lahir, $email, $jenis_kelamin, $alamat){
+        $data = $this->db->prepare('INSERT INTO mahasiswa (nim,nama_mhs,tgl_lahir,email,jenis_kelamin,alamat) VALUES (?, ?, ?, ?, ?, ?)');
         
-        $hasil = $this->conn->query($q);
-
-        if($hasil){
-            return "Sukses";
-        }else{
-            return "Gagal";
-        }
-    }
-
-    public function updateData($table, $data, $id, $id_Value){
+        $data->bindParam(1, $nim);
+        $data->bindParam(2, $nama_mhs);
+        $data->bindParam(3, $tgl_lahir);
+        $data->bindParam(4, $email);
+        $data->bindParam(5, $jenis_kelamin);
+        $data->bindParam(6, $alamat);
         
-        $q = "UPDATE $table SET ";
-        $q.=implode(',', $data);
-        $q.=" WHERE $id='".$id_Value. "'";
 
-        $result = $this->conn->query($q);
-
-        if($result){
-            return "Sukses";
+        $data->execute();
+        
+        if($data){
+            return true;
         }else{
-            return "Gagal";
+            return false;
+        }
+    }
+
+    public function updateData($nim,$nama_mhs, $tgl_lahir, $email, $jenis_kelamin, $alamat){
+        
+        $query = $this->db->prepare('UPDATE mahasiswa set nama_mhs=?,tgl_lahir=?,email=?,jenis_kelamin=?,alamat=? where nim=?');
+        
+        
+        $query->bindParam(1, $nama_mhs);
+        $query->bindParam(2, $tgl_lahir);
+        $query->bindParam(3, $email);
+        $query->bindParam(4, $jenis_kelamin);
+        $query->bindParam(5, $alamat);
+        $query->bindParam(6, $nim);
+
+        $query->execute();
+
+        if($query){
+            return true;
+        }else{
+            return false;
         }
 
     }
 
-    public function deleteData($table, $id, $id_Value){
+    public function get_by_id($id){
+        $query = $this->db->prepare("SELECT * FROM mahasiswa where nim=?");
+        $query->bindParam(1, $id);
+        $query->execute();
+        return $query->fetch();
+    }
 
-        $q = "DELETE FROM $table WHERE $id='" .$id_Value. "'";
+    public function deleteData($nim){
 
-        $result = $this->conn->query($q);
+        $query = $this->db->prepare("DELETE FROM mahasiswa where nim=?");
 
-        if($result){
-            return "Sukses";
+        $query->bindParam(1, $nim);
+
+        $query->execute();
+        if($query){
+            return true;
         }else{
-            return "Gagal";
+            return false;
         }
     }
 }

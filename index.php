@@ -52,7 +52,9 @@
                             include ("list.php");
                         }else if($_GET['page']=="addakademik"){
                             include ("akademik.php");
-                        } else{
+                        }else if($_GET['page']=="edit"){
+                            include ("edit.php");
+                        }else{
                             include "home.php";
                         }
                 ?>

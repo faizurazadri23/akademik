@@ -25,7 +25,7 @@
 
 							$crud = new Crud;
 
-							$data_mhs = $crud->readData('mahasiswa', null, null);
+							$data_mhs = $crud->readData();
 
 							//$data_mhs = mysqli_query($koneksi, "select * from mahasiswa") or die(mysqli_error($koneksi));
 							//script untuk menampilkan data mahasiswa

@@ -6,11 +6,13 @@
 	if(isset($_GET['nim'])){
 		$nim = $_GET['nim']; //menampung nim
 
-		$result = $crud->deleteData('mahasiswa', 'nim', $nim);
+		$result = $crud->deleteData($nim);
 
-		if($result=='Sukses'){
+		if($result){
 			//alert dan redirect ke index.php
 			echo "<script>alert('data berhasil dihapus.');window.location='index.php?page=akademik';</script>";
+		}else{
+			echo "<script>alert('data gagal dihapus.');</script>";
 		}
 	}
 ?>

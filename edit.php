@@ -14,20 +14,21 @@
 			<div class="card-body">
 
                 <?php
-				    include('koneksi.php');
+				    include('Class_crud.php');
 
-                    $nim = $_GET['nim']; 
+                    $nim = $_GET['nim'];
+
+					$crud = new Crud();
+
+					//menampilkan barang berdasarkan id
+					$row = $crud->get_by_id($nim);
                     
-                    //menampilkan barang berdasarkan id
-                    $data = mysqli_query($koneksi, "select * from mahasiswa where nim = '$nim'");
-                    $row = mysqli_fetch_assoc($data);
-
 				?>
 
 				<form action="" method="post" role="form">
 					<div class="form-group">
 						<label>Nomor Induk Mahasiswa</label>
-						<input type="number" name="nim" required="" maxlength="10" disabled class="form-control" value="<?= $row['nim']; ?>">
+						<input type="number" name="nim" required="" maxlength="10" class="form-control" value="<?= $row['nim']; ?>">
 					</div>
 					<div class="form-group">
 						<label>Nama Mahasiswa</label>
@@ -64,23 +65,21 @@
 
 
                 <?php
-				    include("koneksi.php");
+				    
 				
 				//melakukan pengecekan jika button submit diklik maka akan menjalankan perintah simpan dibawah ini
 				if (isset($_POST['submit'])) {
 					//menampung data dari inputan
-					$nim = $row['nim'];
-					$fullname = $_POST['fullname'];
-					$birthday = $_POST['birthday'];
+					
 
-                    $email = $_POST['email'];
-					$gender = $_POST['gender'];
-					$address = $_POST['address'];
+					$hasil = $crud->updateData($_POST['nim'],$_POST['fullname'], $_POST['birthday'], $_POST['email'], $_POST['gender'],  $_POST['address']);
 
-					mysqli_query($koneksi, "update mahasiswa set nama_mhs='$fullname', tgl_lahir='$birthday', email='$email', jenis_kelamin='$gender', alamat='$address' where nim ='$nim'") or die(mysqli_error($koneksi));
-
-					//redirect ke halaman index.php
-					echo "<script>alert('data berhasil diupdate.');window.location='list.php';</script>";
+					if($hasil){
+						echo "<script>alert('data berhasil diubah.');window.location='index.php?page=akademik';</script>";
+					}else{
+						echo "<script>alert('data gagal diubah.');</script>";
+					}
+					
 				}
 				?>
 				
